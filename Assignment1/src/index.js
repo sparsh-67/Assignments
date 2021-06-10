@@ -21,6 +21,8 @@ const options=[
     }
 ];
 let selectedItem=1;
+let charWidth=1;
+
 //create util function for creating elements
 const createDomElement=(name,atrs,children)=>{
     let item=document.createElement(name);
@@ -34,11 +36,22 @@ const createDomElement=(name,atrs,children)=>{
 }
 //truncate text to fit in
 const truncateText=(text)=>{
-    if(text.length<=35)return text;
-    let left=text.slice(0,17);
-    let right=text.slice(text.length-15,text.length);
-    let newText=left+'...'+right;
-    return newText;
+    let mid='...';
+    let have=(350-charWidth)/charWidth;
+    if(have>text.length)return text;
+    let left=(have)/2;
+    let right=have-left;
+    let prefix='',suffix='';
+    for(let i=0;left>0;i++){
+        prefix+=text[i];
+        left--;
+    }
+    for(let i=text.length-1;right>0;i--){
+        suffix=text[i]+suffix;
+        right--;
+    }
+    return prefix+mid+suffix;
+
 }
 // create updateView function
 const updateView=(currItem)=>{
@@ -78,7 +91,6 @@ const Preview=document.querySelector(".preview");
         List.appendChild(listItem);
     })
 }
-updateView(0,0);
 document.addEventListener("keydown",(event)=>{
     if(event.key==="ArrowUp"){
         event.preventDefault();
@@ -91,3 +103,9 @@ document.addEventListener("keydown",(event)=>{
         updateView(newIndex);
     }
 })
+let ruler=document.querySelector('#ruler');
+ruler.innerHTML='XX';
+charWidth=Math.max(ruler.offsetWidth,ruler.offsetHeight);
+charWidth=(charWidth+1)/2;
+console.log(charWidth);
+updateView(0);

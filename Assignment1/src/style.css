@@ -1,7 +1,7 @@
 body {
   text-decoration: solid;
-  color: rgba(0, 0, 0, 0.781);
-  font-size: large;
+  color: #000000c7;
+  font-size: 1em;
 }
 .main {
   display: flex;
@@ -27,8 +27,8 @@ body {
   height: 50px;
   border-radius: 10px;
   float: left;
-  vertical-align: text-bottom;
   margin-right: 10px;
+  margin-left: 5px;
 }
 .thumbnail {
   border-radius: 5px;
@@ -52,4 +52,8 @@ body {
 }
 .textBox {
   width: 350px;
+}
+#ruler {
+  visibility: hidden;
+  white-space: nowrap;
 }
