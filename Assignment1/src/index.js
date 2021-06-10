@@ -38,7 +38,10 @@ const createDomElement=(name,atrs,children)=>{
 //truncate text to fit in
 const truncateText=(text)=>{
     let mid='...';
-    let have=Math.floor((350-charWidth*4)/charWidth);
+    let have=Math.floor((350-charWidth*3)/charWidth);
+    if(have<=0){
+        return '';
+    }
     if(have>text.length)return text;
     let left=(have+1)/2;
     let right=have-left;
@@ -80,10 +83,11 @@ const Preview=document.querySelector(".preview");
         }
         const thumbnail=createDomElement("img",{style:`padding-top:${0.5*charHeight}vh;padding-left:${0.5*charHeight}vh;height:${5*charHeight}vh;width:${6*charHeight}vh;`,class:"thumbnail",src:option.previewImage},[])
         const thumbnailBox=createDomElement("div",{style:`height:${5*charHeight}vh;width:${6*charHeight}vh;margin-right:${charHeight}vh;`,class:"thumbnailBox"},[thumbnail]);
-        const title=document.createTextNode(truncateText(option.title));
-        const titleBox=createDomElement("div",{style:`padding-top:${1.8*charHeight}vh;`,class:"textBox"},[title]);
+        //const title=document.createTextNode(truncateText(option.title));
+        const titleBox=createDomElement("div",{style:`padding-top:${1.8*charHeight}vh;`,class:"textBox"},[]);
+        titleBox.innerHTML=truncateText(option.title);
         const listItem=createDomElement("div",{style:`height:${6*charHeight}vh;`,class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,titleBox]);
-        listItem.appendChild(title);
+        listItem.appendChild(titleBox);
         //handle click;
         listItem.addEventListener("click",(event)=>{
             event.preventDefault();
@@ -107,7 +111,7 @@ document.addEventListener("keydown",(event)=>{
 let ruler=document.querySelector('#ruler');
 ruler.innerHTML='MM';
 charWidth=ruler.offsetWidth;
-charHeight=Math.floor(ruler.offsetHeight/28);
+charHeight=Math.floor(ruler.offsetHeight/17);
 charWidth=(charWidth)/2;
 console.log(charWidth,charHeight);
 ruler.innerHTML='';
