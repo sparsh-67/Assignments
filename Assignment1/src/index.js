@@ -22,6 +22,7 @@ const options=[
 ];
 let selectedItem=1;
 let charWidth=1;
+let charHeight=1;
 
 //create util function for creating elements
 const createDomElement=(name,atrs,children)=>{
@@ -37,9 +38,9 @@ const createDomElement=(name,atrs,children)=>{
 //truncate text to fit in
 const truncateText=(text)=>{
     let mid='...';
-    let have=(350-charWidth)/charWidth;
+    let have=Math.floor((350-charWidth*4)/charWidth);
     if(have>text.length)return text;
-    let left=(have)/2;
+    let left=(have+1)/2;
     let right=have-left;
     let prefix='',suffix='';
     for(let i=0;left>0;i++){
@@ -77,11 +78,11 @@ const Preview=document.querySelector(".preview");
             Preview.appendChild(Image);
             Preview.appendChild(title);
         }
-        const thumbnail=createDomElement("img",{class:"thumbnail",src:option.previewImage},[])
-        const thumbnailBox=createDomElement("div",{class:"thumbnailBox"},[thumbnail]);
+        const thumbnail=createDomElement("img",{style:`padding-top:${0.5*charHeight}vh;padding-left:${0.5*charHeight}vh;height:${5*charHeight}vh;width:${6*charHeight}vh;`,class:"thumbnail",src:option.previewImage},[])
+        const thumbnailBox=createDomElement("div",{style:`height:${5*charHeight}vh;width:${6*charHeight}vh;margin-right:${charHeight}vh;`,class:"thumbnailBox"},[thumbnail]);
         const title=document.createTextNode(truncateText(option.title));
-        const titleBox=createDomElement("div",{class:"textBox"},[title]);
-        const listItem=createDomElement("div",{class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,titleBox]);
+        const titleBox=createDomElement("div",{style:`padding-top:${1.8*charHeight}vh;`,class:"textBox"},[title]);
+        const listItem=createDomElement("div",{style:`height:${6*charHeight}vh;`,class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,titleBox]);
         listItem.appendChild(title);
         //handle click;
         listItem.addEventListener("click",(event)=>{
@@ -104,8 +105,10 @@ document.addEventListener("keydown",(event)=>{
     }
 })
 let ruler=document.querySelector('#ruler');
-ruler.innerHTML='XX';
-charWidth=Math.max(ruler.offsetWidth,ruler.offsetHeight);
-charWidth=(charWidth+1)/2;
-console.log(charWidth);
+ruler.innerHTML='MM';
+charWidth=ruler.offsetWidth;
+charHeight=Math.floor(ruler.offsetHeight/28);
+charWidth=(charWidth)/2;
+console.log(charWidth,charHeight);
+ruler.innerHTML='';
 updateView(0);
