@@ -114,6 +114,7 @@ ruler.innerHTML='MM';
 charWidth=ruler.offsetWidth;
 charHeight=Math.floor(ruler.offsetHeight/17);
 charWidth=(charWidth)/2;
+console.log(charWidth,charHeight);
 setInterval(()=>{
     let ruler=document.getElementById('ruler');
     if(ruler){
@@ -126,6 +127,7 @@ setInterval(()=>{
         if(newcharHeight!=charHeight || newcharWidth!=charWidth){
             charWidth=newcharWidth;
             charHeight=newcharHeight;
+            console.log('hi');
             updateView(selectedItem);
         }
     }
