@@ -22,6 +22,7 @@ const options=[
 ];
 let selectedItem=1;
 let charWidth=1;
+let charHeight=1;
 
 //create util function for creating elements
 const createDomElement=(name,atrs,children)=>{
@@ -37,9 +38,12 @@ const createDomElement=(name,atrs,children)=>{
 //truncate text to fit in
 const truncateText=(text)=>{
     let mid='...';
-    let have=(350-charWidth)/charWidth;
+    let have=Math.floor((300-charWidth*3)/charWidth);
+    if(have<=0){
+        return '';
+    }
     if(have>text.length)return text;
-    let left=(have)/2;
+    let left=(have+1)/2;
     let right=have-left;
     let prefix='',suffix='';
     for(let i=0;left>0;i++){
@@ -77,12 +81,13 @@ const Preview=document.querySelector(".preview");
             Preview.appendChild(Image);
             Preview.appendChild(title);
         }
-        const thumbnail=createDomElement("img",{class:"thumbnail",src:option.previewImage},[])
-        const thumbnailBox=createDomElement("div",{class:"thumbnailBox"},[thumbnail]);
-        const title=document.createTextNode(truncateText(option.title));
-        const titleBox=createDomElement("div",{class:"textBox"},[title]);
-        const listItem=createDomElement("div",{class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,titleBox]);
-        listItem.appendChild(title);
+        const thumbnail=createDomElement("img",{style:`padding-top:${0.5*charHeight}vh;padding-left:${0.5*charHeight}vh;height:${5*charHeight}vh;width:${6*charHeight}vh;`,class:"thumbnail",src:option.previewImage},[])
+        const thumbnailBox=createDomElement("div",{style:`height:${5*charHeight}vh;width:${6*charHeight}vh;margin-right:${charHeight}vh;`,class:"thumbnailBox"},[thumbnail]);
+        //const title=document.createTextNode(truncateText(option.title));
+        const titleBox=createDomElement("div",{style:`padding-top:${1.8*charHeight}vh;`,class:"textBox"},[]);
+        titleBox.innerHTML=truncateText(option.title);
+        const listItem=createDomElement("div",{style:`height:${6*charHeight}vh;`,class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,titleBox]);
+        listItem.appendChild(titleBox);
         //handle click;
         listItem.addEventListener("click",(event)=>{
             event.preventDefault();
@@ -103,9 +108,26 @@ document.addEventListener("keydown",(event)=>{
         updateView(newIndex);
     }
 })
+
 let ruler=document.querySelector('#ruler');
-ruler.innerHTML='XX';
-charWidth=Math.max(ruler.offsetWidth,ruler.offsetHeight);
-charWidth=(charWidth+1)/2;
-console.log(charWidth);
-updateView(0);
+ruler.innerHTML='MM';
+charWidth=ruler.offsetWidth;
+charHeight=Math.floor(ruler.offsetHeight/17);
+charWidth=(charWidth)/2;
+setInterval(()=>{
+    let ruler=document.getElementById('ruler');
+    if(ruler){
+        ruler.innerHTML='MM';
+
+        let newcharWidth=ruler.offsetWidth;
+        let newcharHeight=Math.floor(ruler.offsetHeight/17);
+            newcharHeight=Math.floor(newcharHeight);
+            newcharWidth=(newcharWidth)/2;
+        if(newcharHeight!=charHeight || newcharWidth!=charWidth){
+            charWidth=newcharWidth;
+            charHeight=newcharHeight;
+            updateView(selectedItem);
+        }
+    }
+},1000);
+updateView(selectedItem);
