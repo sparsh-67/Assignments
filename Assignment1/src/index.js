@@ -104,10 +104,10 @@ ruler.innerHTML="M";
 charHeight=ruler.offsetHeight/17;
 
 //Update dynamic
-setInterval(()=>{
+window.addEventListener('resize',()=>{
 let ruler=document.getElementById("ruler");
 ruler.innerHTML="M";
 charHeight=ruler.offsetHeight/17;
 updateView(selectedItem);
-},1000);
+});
 updateView(selectedItem);
