@@ -38,7 +38,7 @@ const createDomElement=(name,atrs,children)=>{
 //truncate text to fit in
 const truncateText=(text)=>{
     let mid='...';
-    let have=Math.floor((350-charWidth*3)/charWidth);
+    let have=Math.floor((300-charWidth*3)/charWidth);
     if(have<=0){
         return '';
     }
@@ -108,11 +108,28 @@ document.addEventListener("keydown",(event)=>{
         updateView(newIndex);
     }
 })
+
 let ruler=document.querySelector('#ruler');
 ruler.innerHTML='MM';
 charWidth=ruler.offsetWidth;
 charHeight=Math.floor(ruler.offsetHeight/17);
 charWidth=(charWidth)/2;
 console.log(charWidth,charHeight);
-ruler.innerHTML='';
-updateView(0);
+setInterval(()=>{
+    let ruler=document.getElementById('ruler');
+    if(ruler){
+        ruler.innerHTML='MM';
+
+        let newcharWidth=ruler.offsetWidth;
+        let newcharHeight=Math.floor(ruler.offsetHeight/17);
+            newcharHeight=Math.floor(newcharHeight);
+            newcharWidth=(newcharWidth)/2;
+        if(newcharHeight!=charHeight || newcharWidth!=charWidth){
+            charWidth=newcharWidth;
+            charHeight=newcharHeight;
+            console.log('hi');
+            updateView(selectedItem);
+        }
+    }
+},1000);
+updateView(selectedItem);
