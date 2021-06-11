@@ -35,59 +35,47 @@ const createDomElement=(name,atrs,children)=>{
     }
     return item;
 }
-//truncate text to fit in
-const truncateText=(text)=>{
-    let mid='...';
-    let have=Math.floor((300-charWidth*3)/charWidth);
-    if(have<=0){
-        return '';
-    }
-    if(have>text.length)return text;
-    let left=(have+1)/2;
-    let right=have-left;
-    let prefix='',suffix='';
-    for(let i=0;left>0;i++){
-        prefix+=text[i];
-        left--;
-    }
-    for(let i=text.length-1;right>0;i--){
-        suffix=text[i]+suffix;
-        right--;
-    }
-    return prefix+mid+suffix;
-
-}
-// create updateView function
-const updateView=(currItem)=>{
-
-//get the hold of list
-const List=document.querySelector(".list");
-//get hold of preview
-const Preview=document.querySelector(".preview");
-    selectedItem=currItem;
+//creates the preview section
+const createPreview=(index,option)=>{
+    const Preview=document.querySelector(".preview");
     //remove previousItem
     while(Preview.childNodes.length>0){
         Preview.removeChild(Preview.childNodes[0]);
     }
+    const Image=createDomElement("img",{src:option.previewImage,class:"previewImage"},[]);
+    const title=document.createTextNode(option.title);
+    Preview.appendChild(Image);
+    Preview.appendChild(title);
+    return Preview;
+}
+
+//create ListItem
+const createListItem=(index,option)=>{
+    let splitindex=(option.title.length+1)/2+1;
+    let left=option.title.slice(0,splitindex);
+    let right=option.title.slice(splitindex,option.title.length);
+    let Span=createDomElement("span",{dataContentStart:left,dataContentEnd:right,class:"textBox"},[]);
+    const thumbnail=createDomElement("img",{style:`padding-top:${0.5*charHeight}vh;padding-left:${0.5*charHeight}vh;height:${5*charHeight}vh;width:${6*charHeight}vh;`,class:"thumbnail",src:option.previewImage},[])
+    const thumbnailBox=createDomElement("div",{style:`height:${5*charHeight}vh;width:${6*charHeight}vh;margin-right:${charHeight}vh;`,class:"thumbnailBox"},[thumbnail]);
+    const listItem=createDomElement("div",{style:`height:${6*charHeight}vh;`,class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,Span]);
+    return listItem;
+}
+
+// create updateView function
+const updateView=(currItem)=>{
+    selectedItem=currItem;
+//get the hold of list
+const List=document.querySelector(".list");
     while(List.childNodes.length>0){
         List.removeChild(List.childNodes[0]);
     }
-
+    let Preview;
     //add all items
     options.forEach((option,index)=>{
         if(index===selectedItem){
-            const Image=createDomElement("img",{src:option.previewImage,class:"previewImage"},[]);
-            const title=document.createTextNode(option.title);
-            Preview.appendChild(Image);
-            Preview.appendChild(title);
+            Preview=createPreview(selectedItem,option);
         }
-        const thumbnail=createDomElement("img",{style:`padding-top:${0.5*charHeight}vh;padding-left:${0.5*charHeight}vh;height:${5*charHeight}vh;width:${6*charHeight}vh;`,class:"thumbnail",src:option.previewImage},[])
-        const thumbnailBox=createDomElement("div",{style:`height:${5*charHeight}vh;width:${6*charHeight}vh;margin-right:${charHeight}vh;`,class:"thumbnailBox"},[thumbnail]);
-        //const title=document.createTextNode(truncateText(option.title));
-        const titleBox=createDomElement("div",{style:`padding-top:${1.8*charHeight}vh;`,class:"textBox"},[]);
-        titleBox.innerHTML=truncateText(option.title);
-        const listItem=createDomElement("div",{style:`height:${6*charHeight}vh;`,class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,titleBox]);
-        listItem.appendChild(titleBox);
+        let listItem=createListItem(index,option)
         //handle click;
         listItem.addEventListener("click",(event)=>{
             event.preventDefault();
@@ -96,6 +84,8 @@ const Preview=document.querySelector(".preview");
         List.appendChild(listItem);
     })
 }
+
+//handle keyboard event
 document.addEventListener("keydown",(event)=>{
     if(event.key==="ArrowUp"){
         event.preventDefault();
@@ -108,26 +98,16 @@ document.addEventListener("keydown",(event)=>{
         updateView(newIndex);
     }
 })
+//compute initial offSetHeight to scale data
+let ruler=document.getElementById("ruler");
+ruler.innerHTML="M";
+charHeight=ruler.offsetHeight/17;
 
-let ruler=document.querySelector('#ruler');
-ruler.innerHTML='MM';
-charWidth=ruler.offsetWidth;
-charHeight=Math.floor(ruler.offsetHeight/17);
-charWidth=(charWidth)/2;
+//Update dynamic
 setInterval(()=>{
-    let ruler=document.getElementById('ruler');
-    if(ruler){
-        ruler.innerHTML='MM';
-
-        let newcharWidth=ruler.offsetWidth;
-        let newcharHeight=Math.floor(ruler.offsetHeight/17);
-            newcharHeight=Math.floor(newcharHeight);
-            newcharWidth=(newcharWidth)/2;
-        if(newcharHeight!=charHeight || newcharWidth!=charWidth){
-            charWidth=newcharWidth;
-            charHeight=newcharHeight;
-            updateView(selectedItem);
-        }
-    }
+let ruler=document.getElementById("ruler");
+ruler.innerHTML="M";
+charHeight=ruler.offsetHeight/17;
+updateView(selectedItem);
 },1000);
 updateView(selectedItem);
