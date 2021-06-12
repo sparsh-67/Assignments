@@ -20,7 +20,7 @@ const options=[
         "title": "interns-performance-report-june-2021.key"
     }
 ];
-let selectedItem=1;
+let selectedItem=0;
 let charWidth=1;
 let charHeight=1;
 
