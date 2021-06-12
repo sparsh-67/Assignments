@@ -48,16 +48,39 @@ const createPreview=(index,option)=>{
     Preview.appendChild(title);
     return Preview;
 }
+const getWidth=(str)=>{
+    document.getElementById("ruler");
+    ruler.innerHTML=str;
+    let width=ruler.offsetWidth;
+    ruler.innerHTML='';
+    return width;
+}
+const getTrucatedString=(option)=>{
+    let mid="...";
+    if(getWidth(option.title)<=250){return option.title;}
+    if(getWidth(mid)>=250)return mid;
+    let l=0,r=option.title.length-1;
+    let prefix='',suffix='';
+    while(l<=r){
+        prefix+=option.title[l];
+        l++;
+        if(getWidth(prefix+mid+suffix)>=250)break;
+        suffix=option.title[r]+suffix;
+        r--;
+        if(getWidth(prefix+mid+suffix)>=250)break;
 
+    }
+    return prefix+mid+suffix;
+}
 //create ListItem
 const createListItem=(index,option)=>{
-    let splitindex=(option.title.length+1)/2+1;
-    let left=option.title.slice(0,splitindex);
-    let right=option.title.slice(splitindex,option.title.length);
-    let Span=createDomElement("span",{dataContentStart:left,dataContentEnd:right,class:"textBox"},[]);
-    const thumbnail=createDomElement("img",{style:`padding-top:${0.5*charHeight}vh;padding-left:${0.5*charHeight}vh;height:${5*charHeight}vh;width:${6*charHeight}vh;`,class:"thumbnail",src:option.previewImage},[])
-    const thumbnailBox=createDomElement("div",{style:`height:${5*charHeight}vh;width:${6*charHeight}vh;margin-right:${charHeight}vh;`,class:"thumbnailBox"},[thumbnail]);
-    const listItem=createDomElement("div",{style:`height:${6*charHeight}vh;`,class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,Span]);
+    
+    const textBox=createDomElement("div",{class:"textBox"},[]);
+    let value=getTrucatedString(option);
+    textBox.innerHTML=value;
+    const thumbnail=createDomElement("img",{class:"thumbnail",src:option.previewImage},[])
+    const thumbnailBox=createDomElement("div",{class:"thumbnailBox"},[thumbnail]);
+    const listItem=createDomElement("div",{style:`height:${6*charHeight}vh;`,class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,textBox]);
     return listItem;
 }
 
@@ -75,8 +98,8 @@ const List=document.querySelector(".list");
         if(index===selectedItem){
             Preview=createPreview(selectedItem,option);
         }
-        let listItem=createListItem(index,option)
-        //handle click;
+         let listItem=createListItem(index,option);
+         //handle click;
         listItem.addEventListener("click",(event)=>{
             event.preventDefault();
             updateView(index);
@@ -108,6 +131,7 @@ window.addEventListener('resize',()=>{
 let ruler=document.getElementById("ruler");
 ruler.innerHTML="M";
 charHeight=ruler.offsetHeight/17;
+console.log("zooming!");
 updateView(selectedItem);
 });
 updateView(selectedItem);
