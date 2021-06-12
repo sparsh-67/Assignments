@@ -15,7 +15,7 @@ body {
   height: 80vh;
   border-radius: 10px;
   text-align: center;
-  margin-left: 10px;
+  margin-left: 1vw;
 }
 .previewImage {
   height: 80vh;
@@ -24,23 +24,24 @@ body {
   object-fit: cover;
 }
 .thumbnailBox {
-  width: 6vh;
+  float: left;
+  width: 5vh;
   height: 5vh;
   border-radius: 10px;
-  float: left;
+  margin-right: 1vh;
 }
 .thumbnail {
   border-radius: 5px;
   height: 5vh;
-  width: 100%;
-  align-items: center;
+  width: 5vh;
   object-fit: cover;
 }
 .listItem {
   height: 5vh;
   width: 100%;
   border-radius: 5px;
-  margin: 1vh;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
 }
 .sideBar {
   float: left;
@@ -54,22 +55,6 @@ body {
   visibility: hidden;
 }
 .textBox {
+  padding-top: 0.3vw;
   display: inline-block;
-  padding-top: 1.8vh;
-}
-span::before,
-span::after {
-  display: inline-block;
-  max-width: 125px;
-  overflow: hidden;
-  white-space: nowrap;
-}
-span::before {
-  content: attr(dataContentStart);
-  text-overflow: ellipsis;
-}
-span::after {
-  content: attr(dataContentEnd);
-  text-overflow: "";
-  direction: rtl;
 }
