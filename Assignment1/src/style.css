@@ -28,13 +28,15 @@ body {
   width: 5vh;
   height: 5vh;
   border-radius: 10px;
-  margin-right: 1vh;
+  margin-right: 2vh;
 }
 .thumbnail {
   border-radius: 5px;
   height: 5vh;
   width: 5vh;
   object-fit: cover;
+  margin-left: 1vh;
+  margin-right: 1vh;
 }
 .listItem {
   height: 5vh;
