@@ -36,6 +36,7 @@ body {
   width: 5vh;
   object-fit: cover;
   margin-left: 1vh;
+  margin-right: 1vh;
 }
 .listItem {
   height: 5vh;
