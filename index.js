@@ -22,6 +22,8 @@ const options=[
 ];
 let selectedItem=0;
 let scaleFactor=1;
+let IntialPixelDensity=1;
+let InitialScaleHeight=17;
 //create util function for creating elements
 const createDomElement=(name,atrs,children)=>{
     let item=document.createElement(name);
@@ -131,15 +133,17 @@ document.addEventListener("keydown",(event)=>{
 //Update dynamic
 let ruler=document.getElementById('ruler');
 ruler.innerHTML='M';
-scaleFactor=ruler.offsetHeight/17;
+IntialPixelDensity=window.devicePixelRatio;
+InitialScaleHeight=ruler.offsetHeight;
+scaleFactor=ruler.offsetHeight/InitialScaleHeight;
 ruler.innerHTML='';
-scaleFactor*=window.devicePixelRatio/2;
+scaleFactor*=window.devicePixelRatio/IntialPixelDensity;
 window.addEventListener('resize',()=>{
     let ruler=document.getElementById('ruler');
     ruler.innerHTML='M';
-    scaleFactor=ruler.offsetHeight/17;
+    scaleFactor=ruler.offsetHeight/InitialScaleHeight;
     ruler.innerHTML='';
-    scaleFactor*=window.devicePixelRatio/2;
+    scaleFactor*=window.devicePixelRatio/IntialPixelDensity;
     updateView(selectedItem);
 });
 updateView(selectedItem);
