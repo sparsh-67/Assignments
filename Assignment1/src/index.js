@@ -20,7 +20,7 @@ const options=[
         "title": "interns-performance-report-june-2021.key"
     }
 ];
-let selectedItem=1;
+let selectedItem=0;
 let charWidth=1;
 let charHeight=1;
 
@@ -48,39 +48,40 @@ const createPreview=(index,option)=>{
     Preview.appendChild(title);
     return Preview;
 }
-const getWidth=(str)=>{
-    document.getElementById("ruler");
-    ruler.innerHTML=str;
-    let width=ruler.offsetWidth;
-    ruler.innerHTML='';
-    return width;
-}
 const getTrucatedString=(option)=>{
-    let mid="...";
-    if(getWidth(option.title)<=300){return option.title;}
-    if(getWidth(mid)>=250)return mid;
     let l=0,r=option.title.length-1;
-    let prefix='',suffix='';
+    let prefix='',suffix='',mid='...';
+    const textBox=createDomElement("div",{class:"textBox"},[]);
     while(l<=r){
+        textBox.innerHTML=prefix+mid+suffix;
+        
+        if(textBox.clientWidth>=textBox.scrollWidth){
+            break;
+        }
+        textBox.innerHTML=prefix+option.title[l]+mid+suffix;
+        if(textBox.clientWidth>=textBox.scrollWidth){
+            break;
+        }
         prefix+=option.title[l];
         l++;
-        if(getWidth(prefix+mid+suffix)>=250)break;
-        suffix=option.title[r]+suffix;
-        r--;
-        if(getWidth(prefix+mid+suffix)>=250)break;
-
+        if(l<=r){
+            textBox.innerHTML=prefix+mid+option.title[r]+suffix;
+            if(textBox.clientWidth>=textBox.scrollWidth){
+                break;
+            }
+            suffix=option.title[r]+suffix;
+            r--;
+        }
     }
-    return prefix+mid+suffix;
+    textBox.innerHTML=prefix+mid+suffix;
+    return textBox;
 }
 //create ListItem
 const createListItem=(index,option)=>{
-    
-    const textBox=createDomElement("div",{class:"textBox"},[]);
-    let value=getTrucatedString(option);
-    textBox.innerHTML=value;
+    const textBox=getTrucatedString(option);
     const thumbnail=createDomElement("img",{class:"thumbnail",src:option.previewImage},[])
     const thumbnailBox=createDomElement("div",{class:"thumbnailBox"},[thumbnail]);
-    const listItem=createDomElement("div",{style:`height:${6*charHeight}vh;`,class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,textBox]);
+    const listItem=createDomElement("div",{class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,textBox]);
     return listItem;
 }
 
@@ -100,11 +101,12 @@ const List=document.querySelector(".list");
         }
          let listItem=createListItem(index,option);
          //handle click;
+         List.appendChild(listItem);
         listItem.addEventListener("click",(event)=>{
             event.preventDefault();
             updateView(index);
         })
-        List.appendChild(listItem);
+      
     })
 }
 
