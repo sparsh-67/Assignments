@@ -1,6 +1,6 @@
 body {
   color: #000000c7;
-  font-size: 1em;
+  font-size: 2em;
   font-family: Arial, Helvetica, sans-serif;
   font-weight: bold;
 }
@@ -44,6 +44,8 @@ body {
   align-content: center;
 }
 .listItem {
+  display: flex;
+  flex-wrap: nowrap;
   border-radius: 5px;
   height: 6vh;
   width: 20vh;
@@ -58,9 +60,9 @@ body {
   transform: translateY(-50%);
   margin-right: 1vh;
   margin-left: 1vh;
-  float: left;
 }
 .thumbnail {
+  display: inline-block;
   position: relative;
   border-radius: 5px;
   object-fit: cover;
@@ -72,12 +74,18 @@ body {
   background-color: rgb(3, 143, 236);
 }
 .textBox {
+  word-break: break-all;
   white-space: normal;
   position: relative;
   top: 50%;
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
-  width: calc(100%-5vh);
+  width: 100%;
+}
+.textBoxWrapper {
+  white-space: nowrap;
+  display: inline-block;
+  position: relative;
 }
 #ruler {
   visibility: hidden;
