@@ -38,7 +38,7 @@ body {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: column;
-  gap: 1px;
+  gap: 1vh;
   width: inherit;
   height: 100%;
   align-content: center;
