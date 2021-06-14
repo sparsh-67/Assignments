@@ -66,7 +66,6 @@ const fillText=(List,option,index)=>{
             currChild.innerHTML='M';
             maxHeight=currChild.clientHeight;
             currChild.innerHTML=option.title;
-            console.log(currChild.clientHeight,3*maxHeight);
             if(currChild.clientHeight<=3*maxHeight){mid='';}
                 while(l<=r){
                 currChild.innerHTML=prefix+mid+suffix;
@@ -137,13 +136,14 @@ IntialPixelDensity=window.devicePixelRatio;
 InitialScaleHeight=ruler.offsetHeight;
 scaleFactor=ruler.offsetHeight/InitialScaleHeight;
 ruler.innerHTML='';
-scaleFactor*=window.devicePixelRatio/IntialPixelDensity;
+scaleFactor*=(window.devicePixelRatio/IntialPixelDensity);
 window.addEventListener('resize',()=>{
     let ruler=document.getElementById('ruler');
     ruler.innerHTML='M';
     scaleFactor=ruler.offsetHeight/InitialScaleHeight;
     ruler.innerHTML='';
     scaleFactor*=window.devicePixelRatio/IntialPixelDensity;
+    console.log(scaleFactor,IntialPixelDensity,InitialScaleHeight);
     updateView(selectedItem);
 });
 updateView(selectedItem);
