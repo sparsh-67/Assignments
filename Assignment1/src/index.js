@@ -50,16 +50,18 @@ const createPreview=(index,option)=>{
 }
 //create ListItem
 const createListItem=(index,option)=>{
+
     const textBox=createDomElement("div",{class:"textBox"},[]);
+    const textBoxWrapper=createDomElement("div",{class:"textBoxWrapper"},[textBox]);
     const thumbnail=createDomElement("img",{class:"thumbnail",src:option.previewImage},[])
     const thumbnailBox=createDomElement("div",{style:`width:${5*scaleFactor}vh;height:${5*scaleFactor}vh;`,class:"thumbnailBox"},[thumbnail]);
-    const listItem=createDomElement("div",{style:`width:${20*scaleFactor}vh;height:${6*scaleFactor}vh;`,class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,textBox]);
+    const listItem=createDomElement("div",{style:`width:${20*scaleFactor}vh;height:${6*scaleFactor}vh;`,class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,textBoxWrapper]);
     return listItem;
 }
 let factor=1;
 // fill text after adjustment
 const fillText=(List,option,index)=>{
-    let currChild=List.childNodes[index].childNodes[1];
+    let currChild=List.childNodes[index].childNodes[1].childNodes[0];
             let l=0,r=option.title.length-1;
             let prefix='',suffix='',mid='...';
             let maxHeight=0;
@@ -87,7 +89,7 @@ const fillText=(List,option,index)=>{
                     r--;
                 }
             }
-        List.childNodes[index].childNodes[1].innerHTML=prefix+mid+suffix;
+        List.childNodes[index].childNodes[1].childNodes[0].innerHTML=prefix+mid+suffix;
         
 }
 // create updateView function
@@ -130,7 +132,7 @@ document.addEventListener("keydown",(event)=>{
     }
 })
 //Update dynamic
-let ruler=document.getElementById('ruler');
+let ruler=document.getElementById('ruler1');
 ruler.innerHTML='M';
 IntialPixelDensity=window.devicePixelRatio;
 InitialScaleHeight=ruler.offsetHeight;
@@ -138,11 +140,12 @@ scaleFactor=ruler.offsetHeight/InitialScaleHeight;
 ruler.innerHTML='';
 scaleFactor*=(window.devicePixelRatio/IntialPixelDensity);
 window.addEventListener('resize',()=>{
-    let ruler=document.getElementById('ruler');
+    let ruler=document.getElementById('ruler1');
     ruler.innerHTML='M';
     scaleFactor=ruler.offsetHeight/InitialScaleHeight;
     ruler.innerHTML='';
-    scaleFactor*=window.devicePixelRatio/IntialPixelDensity;
+    scaleFactor*=(window.devicePixelRatio/IntialPixelDensity);
+    console.log('zooming!');
     updateView(selectedItem);
 });
 updateView(selectedItem);
