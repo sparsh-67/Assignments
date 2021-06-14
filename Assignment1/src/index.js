@@ -21,9 +21,7 @@ const options=[
     }
 ];
 let selectedItem=0;
-let charWidth=1;
-let charHeight=1;
-
+let scaleFactor=1;
 //create util function for creating elements
 const createDomElement=(name,atrs,children)=>{
     let item=document.createElement(name);
@@ -48,43 +46,49 @@ const createPreview=(index,option)=>{
     Preview.appendChild(title);
     return Preview;
 }
-const getTrucatedString=(option)=>{
-    let l=0,r=option.title.length-1;
-    let prefix='',suffix='',mid='...';
-    const textBox=createDomElement("div",{class:"textBox"},[]);
-    while(l<=r){
-        textBox.innerHTML=prefix+mid+suffix;
-        
-        if(textBox.clientWidth>=textBox.scrollWidth){
-            break;
-        }
-        textBox.innerHTML=prefix+option.title[l]+mid+suffix;
-        if(textBox.clientWidth>=textBox.scrollWidth){
-            break;
-        }
-        prefix+=option.title[l];
-        l++;
-        if(l<=r){
-            textBox.innerHTML=prefix+mid+option.title[r]+suffix;
-            if(textBox.clientWidth>=textBox.scrollWidth){
-                break;
-            }
-            suffix=option.title[r]+suffix;
-            r--;
-        }
-    }
-    textBox.innerHTML=prefix+mid+suffix;
-    return textBox;
-}
 //create ListItem
 const createListItem=(index,option)=>{
-    const textBox=getTrucatedString(option);
+    const textBox=createDomElement("div",{class:"textBox"},[]);
     const thumbnail=createDomElement("img",{class:"thumbnail",src:option.previewImage},[])
-    const thumbnailBox=createDomElement("div",{class:"thumbnailBox"},[thumbnail]);
-    const listItem=createDomElement("div",{class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,textBox]);
+    const thumbnailBox=createDomElement("div",{style:`width:${5*scaleFactor}vh;height:${5*scaleFactor}vh;`,class:"thumbnailBox"},[thumbnail]);
+    const listItem=createDomElement("div",{style:`width:${20*scaleFactor}vh;height:${6*scaleFactor}vh;`,class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,textBox]);
     return listItem;
 }
-
+let factor=1;
+// fill text after adjustment
+const fillText=(List,option,index)=>{
+    let currChild=List.childNodes[index].childNodes[1];
+            let l=0,r=option.title.length-1;
+            let prefix='',suffix='',mid='...';
+            let maxHeight=0;
+            currChild.innerHTML='M';
+            maxHeight=currChild.clientHeight;
+            currChild.innerHTML=option.title;
+            console.log(currChild.clientHeight,3*maxHeight);
+            if(currChild.clientHeight<=3*maxHeight){mid='';}
+                while(l<=r){
+                currChild.innerHTML=prefix+mid+suffix;
+                if(currChild.clientHeight>=4*maxHeight){
+                    break;
+                }
+                currChild.innerHTML=prefix+option.title[l]+mid+suffix;
+                if(currChild.clientHeight>=4*maxHeight){
+                    break;
+                }
+                prefix+=option.title[l];
+                l++;
+                if(l<=r){
+                    currChild.innerHTML=prefix+mid+option.title[r]+suffix;
+                    if(currChild.clientHeight>=4*maxHeight){
+                        break;
+                    }
+                    suffix=option.title[r]+suffix;
+                    r--;
+                }
+            }
+        List.childNodes[index].childNodes[1].innerHTML=prefix+mid+suffix;
+        
+}
 // create updateView function
 const updateView=(currItem)=>{
     selectedItem=currItem;
@@ -100,8 +104,9 @@ const List=document.querySelector(".list");
             Preview=createPreview(selectedItem,option);
         }
          let listItem=createListItem(index,option);
-         //handle click;
          List.appendChild(listItem);
+         fillText(List,option,index);
+         //handle click;
         listItem.addEventListener("click",(event)=>{
             event.preventDefault();
             updateView(index);
@@ -123,18 +128,18 @@ document.addEventListener("keydown",(event)=>{
         updateView(newIndex);
     }
 })
-//compute initial offSetHeight to scale data
-let ruler=document.getElementById("ruler");
-ruler.innerHTML="M";
-charHeight=ruler.offsetHeight/17;
-
 //Update dynamic
+let ruler=document.getElementById('ruler');
+ruler.innerHTML='M';
+scaleFactor=ruler.offsetHeight/17;
+ruler.innerHTML='';
+scaleFactor*=window.devicePixelRatio/2;
 window.addEventListener('resize',()=>{
-let ruler=document.getElementById("ruler");
-ruler.innerHTML="M";
-value = window.devicePixelRatio/2;
-charHeight=(ruler.offsetHeight/17)*value ;
-console.log("zooming!");
-updateView(selectedItem);
+    let ruler=document.getElementById('ruler');
+    ruler.innerHTML='M';
+    scaleFactor=ruler.offsetHeight/17;
+    ruler.innerHTML='';
+    scaleFactor*=window.devicePixelRatio/2;
+    updateView(selectedItem);
 });
 updateView(selectedItem);
