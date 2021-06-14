@@ -100,6 +100,8 @@ const List=document.querySelector(".list");
     while(List.childNodes.length>0){
         List.removeChild(List.childNodes[0]);
     }
+    
+
     let Preview;
     //add all items
     options.forEach((option,index)=>{
@@ -132,20 +134,29 @@ document.addEventListener("keydown",(event)=>{
     }
 })
 //Update dynamic
-let ruler=document.getElementById('ruler1');
-ruler.innerHTML='M';
+let ruler=createListItem(0,{title:'M'});
+let List=document.querySelector('.list');
+List.appendChild(ruler);
 IntialPixelDensity=window.devicePixelRatio;
-InitialScaleHeight=ruler.offsetHeight;
-scaleFactor=ruler.offsetHeight/InitialScaleHeight;
-ruler.innerHTML='';
+
+fillText(List,{title:'M'},List.childNodes.length-1)
+let curr=List.childNodes[List.childNodes.length-1].childNodes[1].childNodes[0];
+InitialScaleHeight=curr.offsetHeight;
+scaleFactor=curr.offsetHeight/InitialScaleHeight;
+List.removeChild(List.lastChild);
+console.log(scaleFactor,IntialPixelDensity,InitialScaleHeight);
 scaleFactor*=(window.devicePixelRatio/IntialPixelDensity);
 window.addEventListener('resize',()=>{
-    let ruler=document.getElementById('ruler1');
-    ruler.innerHTML='M';
-    scaleFactor=ruler.offsetHeight/InitialScaleHeight;
-    ruler.innerHTML='';
+    let ruler=createListItem(0,{title:'M'});
+    let List=document.querySelector('.list');
+    List.appendChild(ruler);
+
+fillText(List,{title:'M'},List.childNodes.length-1)
+    let curr=List.childNodes[List.childNodes.length-1].childNodes[1].childNodes[0];
+    scaleFactor=curr.offsetHeight/InitialScaleHeight;
     scaleFactor*=(window.devicePixelRatio/IntialPixelDensity);
-    console.log('zooming!');
+console.log(scaleFactor,IntialPixelDensity,InitialScaleHeight);
+    List.removeChild(List.lastChild);
     updateView(selectedItem);
 });
 updateView(selectedItem);
