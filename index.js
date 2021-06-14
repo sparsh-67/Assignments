@@ -55,7 +55,7 @@ const createListItem=(index,option)=>{
     const textBoxWrapper=createDomElement("div",{class:"textBoxWrapper"},[textBox]);
     const thumbnail=createDomElement("img",{class:"thumbnail",src:option.previewImage},[])
     const thumbnailBox=createDomElement("div",{style:`width:${5*scaleFactor}vh;height:${5*scaleFactor}vh;`,class:"thumbnailBox"},[thumbnail]);
-    const listItem=createDomElement("div",{style:`width:${30*scaleFactor}vh;height:${12*scaleFactor}vh;`,class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,textBoxWrapper]);
+    const listItem=createDomElement("div",{style:`width:${20*scaleFactor}vh;height:${6*scaleFactor}vh;`,class:`listItem ${index===selectedItem?'selected':''}`},[thumbnailBox,textBoxWrapper]);
     return listItem;
 }
 let factor=1;
@@ -132,7 +132,7 @@ document.addEventListener("keydown",(event)=>{
     }
 })
 //Update dynamic
-let ruler=document.getElementById('ruler');
+let ruler=document.getElementById('ruler1');
 ruler.innerHTML='M';
 IntialPixelDensity=window.devicePixelRatio;
 InitialScaleHeight=ruler.offsetHeight;
@@ -140,7 +140,7 @@ scaleFactor=ruler.offsetHeight/InitialScaleHeight;
 ruler.innerHTML='';
 scaleFactor*=(window.devicePixelRatio/IntialPixelDensity);
 window.addEventListener('resize',()=>{
-    let ruler=document.getElementById('ruler');
+    let ruler=document.getElementById('ruler1');
     ruler.innerHTML='M';
     scaleFactor=ruler.offsetHeight/InitialScaleHeight;
     ruler.innerHTML='';
