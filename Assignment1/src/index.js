@@ -57,7 +57,7 @@ const getWidth=(str)=>{
 }
 const getTrucatedString=(option)=>{
     let mid="...";
-    if(getWidth(option.title)<=300){return option.title;}
+    if(getWidth(option.title)<=250){return option.title;}
     if(getWidth(mid)>=250)return mid;
     let l=0,r=option.title.length-1;
     let prefix='',suffix='';
