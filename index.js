@@ -146,6 +146,7 @@ InitialScaleHeight=curr.offsetHeight;
 scaleFactor=curr.offsetHeight/InitialScaleHeight;
 List.removeChild(List.lastChild);
 scaleFactor*=(window.devicePixelRatio/IntialPixelDensity);
+List.style.columnGap=`${2*scaleFactor}vh`;
 //event listner for resize window
 window.addEventListener('resize',()=>{
     let ruler=createListItem(0,{title:'M'});
@@ -156,6 +157,7 @@ window.addEventListener('resize',()=>{
     scaleFactor=curr.offsetHeight/InitialScaleHeight;
     scaleFactor*=(window.devicePixelRatio/IntialPixelDensity);
     List.removeChild(List.lastChild);
+    List.style.columnGap=`${2*scaleFactor}vh`;
     updateView(selectedItem);
 });
 updateView(selectedItem);
