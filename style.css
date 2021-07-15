@@ -24,14 +24,16 @@ body {
 }
 .previewImage {
   position: relative;
-  height: 80vh;
-  width: 50vh;
+  display: block;
+  width: 40vh;
+  height: 60vh;
+
   border-radius: 10px;
   object-fit: cover;
 }
 .sidebar {
   flex-basis: 20vh;
-  height: 80vh;
+  height: 37vh;
   position: relative;
 }
 .list {
